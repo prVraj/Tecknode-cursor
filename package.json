@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "gh:pr": "bash scripts/gh-create-pr.sh",
+    "gh:issue": "bash scripts/gh-create-issue.sh"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1",
