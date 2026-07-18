@@ -1,15 +1,25 @@
 "use client";
 
-import { Radio, Search, Waves } from "lucide-react";
+import { Bell, Download, Radio, Search, Waves } from "lucide-react";
 import { useMemo, useState } from "react";
 import {
-  ENABLED_CAPABILITIES_COUNT,
+  CAPABILITY_COVERAGE,
   MAX_COMPETITORS,
   MOCK_ENTITIES,
+  MOCK_SIGNAL_TREND,
   MOCK_SIGNALS,
+  MOCK_TOP_CAPABILITIES,
+  MOCK_WEEKDAY_ACTIVITY,
+  STAT_DELTAS,
   type Severity,
 } from "@/lib/mock-dashboard-data";
+import { AskIntelWidget } from "./_components/ask-intel-widget";
+import { CapabilityGaugeCard } from "./_components/capability-gauge-card";
 import { RecentSignalsFeed } from "./_components/recent-signals-feed";
+import { SignalTrendCard } from "./_components/signal-trend-card";
+import { StatCard } from "./_components/stat-card";
+import { TopCapabilitiesTable } from "./_components/top-capabilities-table";
+import { WeekdayActivityCard } from "./_components/weekday-activity-card";
 
 const SEVERITY_FILTERS: { label: string; value: Severity }[] = [
   { label: "Critical", value: "p0" },
@@ -27,6 +37,7 @@ export default function DashboardPage() {
   const entities = MOCK_ENTITIES;
   const signals = MOCK_SIGNALS;
   const competitors = entities.filter((e) => e.role === "competitor");
+  const criticalCount = signals.filter((s) => s.severity === "p0").length;
 
   const [severityFilter, setSeverityFilter] = useState<Severity | null>(null);
   const [signalSearch, setSignalSearch] = useState("");
@@ -45,17 +56,26 @@ export default function DashboardPage() {
     {
       label: "Competitors tracked",
       value: `${competitors.length}/${MAX_COMPETITORS}`,
-      Icon: Waves,
+      icon: Waves,
+      delta: STAT_DELTAS.competitors,
     },
     {
       label: "Signals this week",
       value: `${signals.length}`,
-      Icon: Radio,
+      icon: Radio,
+      delta: STAT_DELTAS.signals,
     },
     {
       label: "Active capabilities",
-      value: `${ENABLED_CAPABILITIES_COUNT}`,
-      Icon: Waves,
+      value: `${CAPABILITY_COVERAGE.active}`,
+      icon: Waves,
+      delta: STAT_DELTAS.capabilities,
+    },
+    {
+      label: "Critical signals",
+      value: `${criticalCount}`,
+      icon: Radio,
+      delta: STAT_DELTAS.critical,
     },
   ];
 
@@ -63,28 +83,54 @@ export default function DashboardPage() {
     <div className="flex flex-col bg-neutral-950 min-h-svh">
       <div className="flex items-center gap-3 px-6 pt-4 pb-4 border-b border-neutral-800">
         <h1 className="flex-1 text-xl font-semibold text-neutral-100">Dashboard</h1>
+        <div className="px-3 py-1.5 rounded-lg bg-neutral-900 border border-neutral-800 text-xs text-neutral-400 hidden sm:block">
+          Last 30 days
+        </div>
+        <button
+          type="button"
+          className="size-9 flex items-center justify-center rounded-lg bg-neutral-900 border border-neutral-800 text-neutral-400 hover:text-neutral-100 hover:bg-neutral-800 transition-colors"
+        >
+          <Bell size={16} />
+        </button>
+        <button
+          type="button"
+          className="size-9 flex items-center justify-center rounded-lg bg-neutral-900 border border-neutral-800 text-neutral-400 hover:text-neutral-100 hover:bg-neutral-800 transition-colors"
+        >
+          <Download size={16} />
+        </button>
       </div>
 
       <div className="space-y-5 p-5">
-        <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
           {cards.map((card) => (
-            <div
+            <StatCard
               key={card.label}
-              className="aspect-square sm:aspect-auto sm:min-h-40 p-5 bg-neutral-900 rounded-2xl border border-neutral-800 flex flex-col justify-between gap-4"
-            >
-              <div className="size-9 shrink-0 bg-neutral-800 rounded-lg border border-neutral-700 flex justify-center items-center text-neutral-100">
-                <card.Icon size={18} />
-              </div>
-              <div className="flex flex-col gap-1">
-                <span className="text-neutral-100 text-3xl font-semibold leading-8">
-                  {card.value}
-                </span>
-                <span className="text-neutral-400 text-sm font-normal leading-[21px] truncate">
-                  {card.label}
-                </span>
-              </div>
-            </div>
+              label={card.label}
+              value={card.value}
+              icon={card.icon}
+              delta={card.delta}
+            />
           ))}
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
+          <div className="lg:col-span-2">
+            <SignalTrendCard trend={MOCK_SIGNAL_TREND} signals={signals} />
+          </div>
+          <div className="flex flex-col gap-3">
+            <WeekdayActivityCard data={MOCK_WEEKDAY_ACTIVITY} />
+            <CapabilityGaugeCard
+              active={CAPABILITY_COVERAGE.active}
+              total={CAPABILITY_COVERAGE.total}
+            />
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
+          <div className="lg:col-span-2">
+            <TopCapabilitiesTable capabilities={MOCK_TOP_CAPABILITIES} />
+          </div>
+          <AskIntelWidget />
         </div>
 
         <section>
