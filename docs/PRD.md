@@ -1,54 +1,159 @@
-# PRD: ActionLoop
-*(working title — Loopin / Nudge are alternates)*
+# Tecknode Cursor Draft Product Requirements Document
 
-## 1. Problem
-Decisions and action items made in meetings and chat threads (WhatsApp, Slack) routinely get buried and forgotten. There's no follow-through mechanism, so tasks silently drop, owners are unclear, and deadlines slip. This wastes time re-discussing the same decisions and erodes accountability.
+## Product overview
 
-## 2. Goal
-Automatically surface action items from meeting transcripts and chat threads, assign owners and deadlines, and proactively follow up — so nothing important gets lost in conversation.
+Tecknode Cursor is a marketing-intelligence platform that monitors a brand and its competitors across traditional search, AI search, and online mentions. It turns collected data into prioritized signals, searchable evidence, scheduled briefs, and grounded AI answers.
 
-## 3. Target User
-- Working professionals and small teams who run frequent meetings and coordinate over informal channels (WhatsApp/Slack groups) as well as formal ones (Zoom/Teams meetings).
-- Anyone who's said "wait, who was supposed to do that?" a week after a meeting or group chat.
+The product should help users answer:
 
-## 4. Core Use Case (MVP)
-1. User uploads or pastes a meeting transcript, or connects/exports a chat thread.
-2. AI extracts: decisions made, action items, owner (if named), and deadline (if stated or inferable).
-3. Output is a clean, structured summary: **Decision → Action → Owner → Due date**.
-4. A follow-up reminder is sent to the owner as the deadline approaches.
-5. User can mark items done / reassign / edit before reminders go out.
+- How visible is the brand in traditional and AI-powered search?
+- What changed across rankings, citations, mentions, and brand risk?
+- Which changes require immediate action?
+- How does the brand compare with tracked competitors?
+- What happened recently, and what should the user do next?
 
-## 5. Key Features
-| Feature | Priority |
-|---|---|
-| Transcript/chat ingestion (paste text or upload file) | Must-have |
-| Action item + owner + deadline extraction (LLM-based) | Must-have |
-| Structured summary output (viewable list/dashboard) | Must-have |
-| Manual edit/confirm before reminders trigger | Must-have |
-| Automated reminder (email or in-app) as deadline nears | Should-have |
-| Support for informal chat exports (WhatsApp/Slack) in addition to meeting transcripts | Should-have |
-| Auto-generated follow-up summary message to share back with the group | Nice-to-have |
-| Recurring meeting memory (track open items across multiple sessions) | Nice-to-have |
+## Authentication and account
 
-## 6. Out of Scope (for hackathon MVP)
-- Live audio transcription (assume transcript/text is already available, or use an off-the-shelf speech-to-text API rather than building one).
-- Deep integrations with calendar/project management tools (Jira, Asana, etc.) — stub this out or mock it for the demo.
-- Multi-language support beyond English.
+- Email/password signup and login.
+- Google OAuth login.
+- Email verification and automatic post-verification login.
+- Forgot/reset password flows.
+- Cloudflare Turnstile bot protection.
+- Rate limiting and disposable-email protection.
+- Sign out, JSON account-data export, and scheduled account deletion with a 30-day grace period.
+- Account-deletion requests immediately revoke connected OAuth tokens.
 
-## 7. Success Metrics
-- Accuracy of extracted action items vs. a manually-reviewed transcript (demo-able via a before/after comparison).
-- Time saved: "5-minute meeting recap" vs. manually re-reading a 45-minute transcript.
-- Judge-facing demo: paste a messy WhatsApp thread or transcript → get a clean action list in seconds.
+## Dashboard
 
-## 8. Suggested Tech Approach
-- LLM (e.g., Claude API) for extraction + structuring, using a prompt that outputs strict JSON (decision, action, owner, deadline).
-- Simple frontend: paste-box + structured list/table view.
-- Reminder logic: basic scheduled job (cron-like) checking deadlines and firing email/notification.
-- Optional: WhatsApp/Slack export parser (regex/text preprocessing) before feeding into the LLM.
+- Competitors tracked, weekly signal count, and active capability count.
+- Recent intelligence feed.
+- Signal search and severity filtering.
+- Severity levels: critical, high, medium, and low.
 
-## 9. Demo Flow (for judges)
-1. Show a messy, realistic chat thread or meeting transcript.
-2. Paste it into ActionLoop.
-3. Show the clean action-item output appear in seconds.
-4. Show a reminder notification firing for an upcoming deadline.
-5. Close with the "before vs. after" — chaos vs. clarity.
+## Brand and competitor tracking
+
+- Track a primary brand and competitor domains.
+- Add, edit, or remove tracked entities.
+- Store brand name, keywords, location, and social profiles.
+- Automatic competitor social-profile discovery.
+- Entity summary cards showing SEO rank, AI visibility, and mentions.
+- Per-entity signal history, raw evidence, connector status, errors, and data-quality issues.
+- Manual **Run Now** for individual capabilities.
+
+## Intelligence collection
+
+- Scheduled collection with capability-specific daily, weekly, biweekly, or monthly cadence.
+- Time-series snapshots for trends and comparisons.
+- Change detection that emits actionable alerts.
+- Evidence including source URLs, before/after hashes, diff snippets, and confidence.
+- Cost tracking, safety limits, retries, dependency ordering, and run logs.
+- Signal feedback with thumbs-up/down and reasons such as inaccurate, irrelevant, or not actionable.
+
+## Signal categories
+
+This PRD focuses on **64 capabilities across three product categories**: SEO, GEO, and Mentions and Brand Protection.
+
+### SEO — 32 capabilities
+
+- Keyword rankings, keyword gap, intent, gains/losses, and position distribution.
+- Organic share of voice, traffic estimates, traffic value, and SERP volatility.
+- SERP features and answer-box ownership.
+- Local and international rankings.
+- Backlinks, authority score, and backlink gains/losses.
+- Core Web Vitals and site-health score.
+- Content score, freshness, decay, CTR anomalies, and cannibalization.
+- Sitemap changes, index coverage, accidental noindex, canonical drift, and indexation health.
+- 404/redirect monitoring and internal-linking gaps.
+
+### GEO / AI search visibility — 25 capabilities
+
+- Citations and brand mentions across AI answers.
+- Per-engine and per-keyword citation breakdowns.
+- Citation sources, taxonomy, authority, velocity, and causality.
+- Co-citations and perceived competitor set.
+- AI sentiment and answer position.
+- Geographic mention distribution.
+- Competitor AI visibility and composite GEO visibility score.
+- AI accuracy audits.
+- AI traffic estimates and lift projections.
+- Brand alternatives and GEO content gaps.
+- Prompt research, AI search volume, shopping citations, YouTube citations, and social AI influence.
+
+### Mentions and brand protection — 7 capabilities
+
+- Brand and keyword mentions across Twitter/X, Reddit, Hacker News, and YouTube.
+- YouTube-specific mention and sentiment monitoring.
+- News and media coverage.
+- Lookalike/typosquatted domains.
+- Phishing detection.
+- Trademark-abuse classification.
+
+## Briefs and digests
+
+- AI-generated digest from recent signals.
+- Searchable digest history.
+- Headline, categorized findings, and suggested actions.
+- Manual **Generate now** for a 24-hour window.
+- Scheduled daily or weekly delivery.
+- Configurable weekday and local delivery time.
+- Email delivery to the authenticated user.
+- Optional broadcast to Slack, Telegram, and Discord.
+- Delivery status, last-run time, and next-run time.
+
+## Connections and integrations
+
+### Analytics and search
+
+- Google Analytics 4.
+- Google Search Console.
+- PostHog.
+- Plausible.
+- Microsoft Clarity.
+
+### SEO
+
+- Ahrefs.
+- Semrush.
+
+### Advertising
+
+- Google Ads.
+- Reddit Ads.
+
+### Social
+
+- YouTube.
+- Instagram.
+- TikTok.
+- LinkedIn.
+- Reddit.
+- Facebook.
+
+### Delivery channels
+
+- Slack.
+- Telegram.
+- Discord.
+
+Connections use managed OAuth where supported. Users must be able to connect, reconnect, disconnect, and select the relevant property, site, project, or account.
+
+## Conversational intelligence
+
+- Dashboard AI widget for asking questions about signals.
+- Persistent Ask Intel conversations with grounded answers and signal citations.
+- Search signals by entity, capability, severity, time range, and text.
+- Open signal details with supporting evidence and source links.
+- Compare tracked entities across a selected capability and time window.
+- Retrieve snapshot history, digests, analytics, and integration status.
+- Summarize high-severity issues through a **What broke?** workflow.
+- Preserve conversation history per authenticated user.
+
+## Explicitly out of scope
+
+- Organizations, workspaces, member roles, invitations, and workspace switching.
+- Onboarding wizard.
+- Billing, subscriptions, checkout, and payment-provider integrations.
+- Public marketing pages, free-audit funnel, and administrative dashboards.
+- Experimental Firehose and standalone recommendation surfaces.
+- Signal categories other than SEO, GEO, and Mentions and Brand Protection.
+- Legacy sandbox and Mission Control surfaces.
