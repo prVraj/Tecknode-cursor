@@ -23,6 +23,7 @@
 # misc
 .DS_Store
 CLAUDE.md
+AGENTS.md
 *.pem
 
 # debug
