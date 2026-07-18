@@ -23,14 +23,18 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
+import { MOCK_ENTITIES, MOCK_SIGNALS } from "@/lib/mock-dashboard-data";
+
+const CRITICAL_COUNT = MOCK_SIGNALS.filter((s) => s.severity === "p0").length;
+const COMPETITOR_COUNT = MOCK_ENTITIES.filter((e) => e.role === "competitor").length;
 
 const NAV_ITEMS = [
-  { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-  { label: "Tracking", href: "/dashboard/tracking", icon: Target },
-  { label: "Daily Brief", href: "/dashboard/digest", icon: FileText },
-  { label: "Integrations", href: "/dashboard/integrations", icon: Plug },
-  { label: "Ask Intel", href: "/dashboard/chat", icon: MessageCircle },
-  { label: "Settings", href: "/dashboard/settings", icon: Settings },
+  { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard, badge: CRITICAL_COUNT },
+  { label: "Tracking", href: "/dashboard/tracking", icon: Target, badge: COMPETITOR_COUNT },
+  { label: "Daily Brief", href: "/dashboard/digest", icon: FileText, badge: 0 },
+  { label: "Integrations", href: "/dashboard/integrations", icon: Plug, badge: 0 },
+  { label: "Ask Intel", href: "/dashboard/chat", icon: MessageCircle, badge: 0 },
+  { label: "Settings", href: "/dashboard/settings", icon: Settings, badge: 0 },
 ] as const;
 
 // Placeholder until account-scoped auth (Task 2 of the migration plan) lands.
@@ -84,6 +88,11 @@ export function AppSidebar() {
                         >
                           {item.label}
                         </span>
+                        {item.badge > 0 ? (
+                          <span className="px-1.5 py-0.5 rounded-md bg-neutral-700 text-[10px] font-medium text-neutral-200 leading-none">
+                            {item.badge}
+                          </span>
+                        ) : null}
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
