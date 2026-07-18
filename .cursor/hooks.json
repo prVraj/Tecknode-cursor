@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "hooks": {
+    "beforeShellExecution": [
+      {
+        "command": "bash .cursor/hooks/before-db-write-guard.sh",
+        "failClosed": true
+      },
+      {
+        "command": "bash .cursor/hooks/pre-commit-checks.sh",
+        "matcher": "git\\s+commit",
+        "failClosed": true
+      }
+    ]
+  }
+}
