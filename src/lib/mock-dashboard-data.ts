@@ -22,7 +22,7 @@ export interface MockSignal {
 export const MAX_COMPETITORS = 5;
 
 export const MOCK_ENTITIES: MockEntity[] = [
-  { id: "entity-primary", role: "primary", brandName: "Tecknode", domain: "tecknode.dev" },
+  { id: "entity-primary", role: "primary", brandName: "Signals", domain: "signals.dev" },
   { id: "entity-comp-1", role: "competitor", brandName: "Northwind Analytics", domain: "northwind.io" },
   { id: "entity-comp-2", role: "competitor", brandName: "Aurora Insights", domain: "auroralabs.ai" },
 ];
@@ -54,7 +54,7 @@ export const MOCK_SIGNALS: MockSignal[] = [
   },
   {
     id: "sig-3",
-    title: "New lookalike domain detected: tecknode-app.com",
+    title: "New lookalike domain detected: signals-app.com",
     severity: "p1",
     category: "mentions",
     capabilityLabel: "Lookalike Domains",
@@ -112,3 +112,69 @@ export const MOCK_SIGNALS: MockSignal[] = [
 ];
 
 export const ENABLED_CAPABILITIES_COUNT = 41;
+
+export interface TrendPoint {
+  date: string;
+  count: number;
+}
+
+function daysAgoLabel(daysAgo: number): string {
+  const d = new Date(Date.now() - daysAgo * 24 * 60 * 60 * 1000);
+  return d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+}
+
+const TREND_COUNTS = [4, 6, 5, 8, 7, 10, 9, 12, 11, 14, 13, 16, 15, 18];
+
+export const MOCK_SIGNAL_TREND: TrendPoint[] = TREND_COUNTS.map((count, i) => ({
+  date: daysAgoLabel(TREND_COUNTS.length - 1 - i),
+  count,
+}));
+
+export interface WeekdayActivity {
+  day: string;
+  count: number;
+}
+
+export const MOCK_WEEKDAY_ACTIVITY: WeekdayActivity[] = [
+  { day: "Sun", count: 6 },
+  { day: "Mon", count: 11 },
+  { day: "Tue", count: 18 },
+  { day: "Wed", count: 9 },
+  { day: "Thu", count: 13 },
+  { day: "Fri", count: 8 },
+  { day: "Sat", count: 5 },
+];
+
+export const CAPABILITY_COVERAGE = {
+  active: ENABLED_CAPABILITIES_COUNT,
+  total: 64,
+};
+
+export interface TopCapability {
+  capabilityLabel: string;
+  category: Category;
+  signalCount: number;
+  severity: Severity;
+}
+
+export const MOCK_TOP_CAPABILITIES: TopCapability[] = [
+  { capabilityLabel: "Keyword Rankings", category: "seo", signalCount: 14, severity: "p0" },
+  { capabilityLabel: "Competitor AI Visibility", category: "geo", signalCount: 11, severity: "p0" },
+  { capabilityLabel: "Core Web Vitals", category: "seo", signalCount: 9, severity: "p1" },
+  { capabilityLabel: "AI Sentiment", category: "geo", signalCount: 7, severity: "p2" },
+  { capabilityLabel: "Lookalike Domains", category: "mentions", signalCount: 4, severity: "p1" },
+];
+
+export type StatDeltaDirection = "up" | "down";
+
+export interface StatDelta {
+  direction: StatDeltaDirection;
+  percent: number;
+}
+
+export const STAT_DELTAS: Record<"competitors" | "signals" | "capabilities" | "critical", StatDelta> = {
+  competitors: { direction: "up", percent: 12 },
+  signals: { direction: "up", percent: 24 },
+  capabilities: { direction: "down", percent: 3 },
+  critical: { direction: "up", percent: 8 },
+};
