@@ -13,27 +13,27 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://tecknode.dev"),
+  metadataBase: new URL("https://signals.dev"),
   title: {
-    default: "Tecknode — Marketing Intelligence Platform",
-    template: "%s | Tecknode",
+    default: "Signals — Marketing Intelligence Platform",
+    template: "%s | Signals",
   },
   description:
-    "Monitor competitors, track SEO rankings, and detect brand signals across search and AI with Tecknode's marketing intelligence dashboard.",
-  applicationName: "Tecknode",
+    "Monitor competitors, track SEO rankings, and detect brand signals across search and AI with Signals' marketing intelligence dashboard.",
+  applicationName: "Signals",
   openGraph: {
-    title: "Tecknode — Marketing Intelligence Platform",
+    title: "Signals — Marketing Intelligence Platform",
     description:
-      "Monitor competitors, track SEO rankings, and detect brand signals across search and AI with Tecknode's marketing intelligence dashboard.",
-    siteName: "Tecknode",
+      "Monitor competitors, track SEO rankings, and detect brand signals across search and AI with Signals' marketing intelligence dashboard.",
+    siteName: "Signals",
     type: "website",
     locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Tecknode — Marketing Intelligence Platform",
+    title: "Signals — Marketing Intelligence Platform",
     description:
-      "Monitor competitors, track SEO rankings, and detect brand signals across search and AI with Tecknode's marketing intelligence dashboard.",
+      "Monitor competitors, track SEO rankings, and detect brand signals across search and AI with Signals' marketing intelligence dashboard.",
   },
 };
 

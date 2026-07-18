@@ -36,7 +36,7 @@ const NAV_ITEMS = [
 // Placeholder until account-scoped auth (Task 2 of the migration plan) lands.
 const MOCK_USER = {
   name: "Demo User",
-  email: "demo@tecknode.dev",
+  email: "demo@signals.dev",
 };
 
 export function AppSidebar() {
@@ -52,7 +52,7 @@ export function AppSidebar() {
   return (
     <Sidebar className="bg-[#0f0f0f] border-r border-neutral-800">
       <SidebarHeader className="p-3">
-        <span className="text-sm font-semibold text-neutral-100">Tecknode</span>
+        <span className="text-sm font-semibold text-neutral-100">Signals</span>
       </SidebarHeader>
 
       <SidebarContent className="p-2">

@@ -22,7 +22,7 @@ export interface MockSignal {
 export const MAX_COMPETITORS = 5;
 
 export const MOCK_ENTITIES: MockEntity[] = [
-  { id: "entity-primary", role: "primary", brandName: "Tecknode", domain: "tecknode.dev" },
+  { id: "entity-primary", role: "primary", brandName: "Signals", domain: "signals.dev" },
   { id: "entity-comp-1", role: "competitor", brandName: "Northwind Analytics", domain: "northwind.io" },
   { id: "entity-comp-2", role: "competitor", brandName: "Aurora Insights", domain: "auroralabs.ai" },
 ];
@@ -54,7 +54,7 @@ export const MOCK_SIGNALS: MockSignal[] = [
   },
   {
     id: "sig-3",
-    title: "New lookalike domain detected: tecknode-app.com",
+    title: "New lookalike domain detected: signals-app.com",
     severity: "p1",
     category: "mentions",
     capabilityLabel: "Lookalike Domains",
