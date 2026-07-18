@@ -13,7 +13,6 @@ import {
   STAT_DELTAS,
   type Severity,
 } from "@/lib/mock-dashboard-data";
-import { AskIntelWidget } from "./_components/ask-intel-widget";
 import { CapabilityGaugeCard } from "./_components/capability-gauge-card";
 import { RecentSignalsFeed } from "./_components/recent-signals-feed";
 import { SignalTrendCard } from "./_components/signal-trend-card";
@@ -126,12 +125,7 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
-          <div className="lg:col-span-2">
-            <TopCapabilitiesTable capabilities={MOCK_TOP_CAPABILITIES} />
-          </div>
-          <AskIntelWidget />
-        </div>
+        <TopCapabilitiesTable capabilities={MOCK_TOP_CAPABILITIES} />
 
         <section>
           <div className="self-stretch inline-flex justify-between items-center mb-3 w-full">
