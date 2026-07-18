@@ -1,13 +1,6 @@
 "use client";
 
-import {
-  FileText,
-  LayoutDashboard,
-  MessageCircle,
-  Plug,
-  Settings,
-  Target,
-} from "lucide-react";
+import { FileText, LayoutDashboard, Plug, Target } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
@@ -33,8 +26,6 @@ const NAV_ITEMS = [
   { label: "Tracking", href: "/dashboard/tracking", icon: Target, badge: COMPETITOR_COUNT },
   { label: "Daily Brief", href: "/dashboard/digest", icon: FileText, badge: 0 },
   { label: "Integrations", href: "/dashboard/integrations", icon: Plug, badge: 0 },
-  { label: "Ask Intel", href: "/dashboard/chat", icon: MessageCircle, badge: 0 },
-  { label: "Settings", href: "/dashboard/settings", icon: Settings, badge: 0 },
 ] as const;
 
 // Placeholder until account-scoped auth (Task 2 of the migration plan) lands.
