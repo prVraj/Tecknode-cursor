@@ -1,0 +1,52 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.*
+
+# Build output
+.next/
+out/
+build/
+dist/
+.vercel/
+
+# Legacy duplicate landing app (main app lives in src/)
+landing/
+
+# Orphan / nested copies
+marketing-agent/
+
+# Lock files (large, low signal for the agent)
+bun.lock
+package-lock.json
+pnpm-lock.yaml
+pnpm-workspace.yaml
+landing/package-lock.json
+
+# Generated / cache
+*.tsbuildinfo
+next-env.d.ts
+.turbo/
+.cache/
+
+# Test coverage
+coverage/
+
+# Environment & secrets
+.env
+.env.*
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# OS & editor noise
+.DS_Store
+*.pem
+
+# Local-only agent docs (not shared with team)
+CLAUDE.md
+AGENTS.md
