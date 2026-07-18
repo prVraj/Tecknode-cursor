@@ -64,3 +64,91 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Landing page tokens & utilities (scoped by unique class/var names to avoid clashing with the dashboard theme) */
+:root {
+  --color-landing-bg: #000000;
+  --color-landing-surface: #131316;
+  --color-landing-surface-2: #1a1a1f;
+  --color-landing-border: rgba(255, 255, 255, 0.08);
+  --color-landing-accent: #5b8def;
+  --color-landing-accent-2: #8b5cf6;
+  --color-landing-muted: #9a9aa5;
+}
+
+.bg-landing-grid {
+  background-image:
+    radial-gradient(60% 50% at 50% 0%, rgba(91, 141, 239, 0.18), transparent 70%),
+    radial-gradient(40% 40% at 85% 10%, rgba(139, 92, 246, 0.14), transparent 70%);
+}
+
+.bg-landing-dot-grid {
+  background-image: radial-gradient(
+    rgba(255, 255, 255, 0.55) 1px,
+    transparent 1.5px
+  );
+  background-size: 26px 26px;
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.8) 0%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.8) 0%,
+    rgba(0, 0, 0, 0) 100%
+  );
+}
+
+.text-landing-gradient {
+  background: linear-gradient(180deg, #ffffff 0%, #b7bcc9 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.text-landing-fade-vertical {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0.14) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 1) 0%,
+    rgba(0, 0, 0, 0.55) 60%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 1) 0%,
+    rgba(0, 0, 0, 0.55) 60%,
+    rgba(0, 0, 0, 0) 100%
+  );
+}
+
+@keyframes landing-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-landing-marquee {
+  animation: landing-marquee 28s linear infinite;
+}
+
+@keyframes landing-float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-16px);
+  }
+}
+
+.animate-landing-float {
+  animation: landing-float 6s ease-in-out infinite;
+}
