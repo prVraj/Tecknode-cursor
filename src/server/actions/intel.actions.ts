@@ -1,6 +1,8 @@
 "use server";
 
 import { z } from "zod";
+import { MAX_COMPETITORS } from "@/lib/dashboard-data";
+import { UserFacingError } from "@/lib/errors";
 import { accountAction } from "@/server/action-utils";
 import { signalRepo } from "@/server/db/repos/signal.repo";
 import { signalFeedbackRepo } from "@/server/db/repos/signal-feedback.repo";
@@ -10,6 +12,7 @@ import {
   type EnabledCapabilities,
   SIGNAL_FEEDBACK_RATINGS,
   SIGNAL_FEEDBACK_REASONS,
+  TRACKED_ENTITY_ROLES,
 } from "@/server/db/schema";
 
 // NOTE: Engine-triggering actions (add-entity discovery, running connectors,
@@ -25,6 +28,69 @@ export const listTrackedEntitiesAction = accountAction(
     return trackedEntityRepo.listByUser(ctx.userId);
   },
   { name: "listTrackedEntities" },
+);
+
+/**
+ * Normalizes a user-entered domain to a bare host: lowercased, no protocol,
+ * no leading "www.", no path/query. Throws a UserFacingError on anything that
+ * doesn't look like a domain (so the client can render the message verbatim).
+ */
+function normalizeDomain(raw: string): string {
+  let domain = raw.trim().toLowerCase();
+  domain = domain.replace(/^https?:\/\//, "");
+  domain = domain.replace(/^www\./, "");
+  domain = domain.split("/")[0]!.split("?")[0]!;
+
+  if (!domain || !domain.includes(".")) {
+    throw new UserFacingError("Enter a valid domain, e.g. example.com");
+  }
+  return domain;
+}
+
+const addEntityInput = z.object({
+  domain: z.string().min(1),
+  brandName: z.string().optional(),
+  role: z.enum(TRACKED_ENTITY_ROLES),
+});
+
+export const addTrackedEntityAction = accountAction(
+  addEntityInput,
+  async (ctx, { domain: rawDomain, brandName, role }) => {
+    const domain = normalizeDomain(rawDomain);
+
+    const existing = await trackedEntityRepo.findByUserAndDomain(
+      ctx.userId,
+      domain,
+    );
+    if (existing) {
+      throw new UserFacingError(`You're already tracking ${domain}`);
+    }
+
+    if (role === "primary") {
+      const primaryCount = await trackedEntityRepo.countPrimary(ctx.userId);
+      if (primaryCount > 0) {
+        throw new UserFacingError("You already have a primary brand");
+      }
+    } else {
+      const competitorCount = await trackedEntityRepo.countCompetitors(
+        ctx.userId,
+      );
+      if (competitorCount >= MAX_COMPETITORS) {
+        throw new UserFacingError(
+          `You can track up to ${MAX_COMPETITORS} competitors`,
+        );
+      }
+    }
+
+    return trackedEntityRepo.create({
+      userId: ctx.userId,
+      role,
+      domain,
+      brandName: brandName?.trim() || null,
+      payload: role === "competitor" ? { discoveryStatus: "pending" } : {},
+    });
+  },
+  { name: "addTrackedEntity" },
 );
 
 export const removeTrackedEntityAction = accountAction(

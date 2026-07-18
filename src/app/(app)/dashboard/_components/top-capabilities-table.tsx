@@ -1,4 +1,4 @@
-import type { Severity, TopCapability } from "@/lib/mock-dashboard-data";
+import type { Severity, TopCapability } from "@/lib/dashboard-data";
 
 interface TopCapabilitiesTableProps {
   capabilities: TopCapability[];

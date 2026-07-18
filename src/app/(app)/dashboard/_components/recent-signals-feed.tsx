@@ -1,15 +1,15 @@
 import { ExternalLink, Plus } from "lucide-react";
 import Link from "next/link";
 import {
+  type DashboardEntity,
+  type DashboardSignal,
   MAX_COMPETITORS,
-  type MockEntity,
-  type MockSignal,
   type Severity,
-} from "@/lib/mock-dashboard-data";
+} from "@/lib/dashboard-data";
 
 interface RecentSignalsFeedProps {
-  signals: MockSignal[];
-  entities: MockEntity[];
+  signals: DashboardSignal[];
+  entities: DashboardEntity[];
 }
 
 const SEVERITY_BADGE: Record<

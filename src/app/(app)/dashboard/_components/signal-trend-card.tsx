@@ -1,11 +1,11 @@
 "use client";
 
 import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis } from "recharts";
-import { type MockSignal, type TrendPoint } from "@/lib/mock-dashboard-data";
+import type { DashboardSignal, TrendPoint } from "@/lib/dashboard-data";
 
 interface SignalTrendCardProps {
   trend: TrendPoint[];
-  signals: MockSignal[];
+  signals: DashboardSignal[];
 }
 
 function CustomTooltip({

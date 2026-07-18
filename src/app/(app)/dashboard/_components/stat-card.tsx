@@ -1,5 +1,5 @@
 import { ArrowDown, ArrowUp, type LucideIcon } from "lucide-react";
-import type { StatDelta } from "@/lib/mock-dashboard-data";
+import type { StatDelta } from "@/lib/dashboard-data";
 
 interface StatCardProps {
   label: string;

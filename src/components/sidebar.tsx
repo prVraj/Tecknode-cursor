@@ -17,34 +17,11 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { useSession } from "@/lib/auth-client";
-import { MOCK_ENTITIES, MOCK_SIGNALS } from "@/lib/mock-dashboard-data";
 
-const CRITICAL_COUNT = MOCK_SIGNALS.filter((s) => s.severity === "p0").length;
-const COMPETITOR_COUNT = MOCK_ENTITIES.filter(
-  (e) => e.role === "competitor",
-).length;
-
-const NAV_ITEMS = [
-  {
-    label: "Dashboard",
-    href: "/dashboard",
-    icon: LayoutDashboard,
-    badge: CRITICAL_COUNT,
-  },
-  {
-    label: "Tracking",
-    href: "/dashboard/tracking",
-    icon: Target,
-    badge: COMPETITOR_COUNT,
-  },
-  { label: "Daily Brief", href: "/dashboard/digest", icon: FileText, badge: 0 },
-  {
-    label: "Integrations",
-    href: "/dashboard/integrations",
-    icon: Plug,
-    badge: 0,
-  },
-] as const;
+export type SidebarBadges = {
+  criticalCount: number;
+  competitorCount: number;
+};
 
 type SidebarUser = {
   name: string;
@@ -57,7 +34,40 @@ function userInitial(name: string | undefined, email: string | undefined) {
   return source.charAt(0).toUpperCase();
 }
 
-export function AppSidebar({ user: initialUser }: { user: SidebarUser }) {
+export function AppSidebar({
+  user: initialUser,
+  badges,
+}: {
+  user: SidebarUser;
+  badges: SidebarBadges;
+}) {
+  const NAV_ITEMS = [
+    {
+      label: "Dashboard",
+      href: "/dashboard",
+      icon: LayoutDashboard,
+      badge: badges.criticalCount,
+    },
+    {
+      label: "Tracking",
+      href: "/dashboard/tracking",
+      icon: Target,
+      badge: badges.competitorCount,
+    },
+    {
+      label: "Daily Brief",
+      href: "/dashboard/digest",
+      icon: FileText,
+      badge: 0,
+    },
+    {
+      label: "Integrations",
+      href: "/dashboard/integrations",
+      icon: Plug,
+      badge: 0,
+    },
+  ] as const;
+
   const pathname = usePathname();
   const { setOpenMobile } = useSidebar();
   const { data: session, isPending } = useSession();

@@ -1,7 +1,7 @@
 "use client";
 
 import { Bar, BarChart, Cell, ResponsiveContainer, Tooltip, XAxis } from "recharts";
-import type { WeekdayActivity } from "@/lib/mock-dashboard-data";
+import type { WeekdayActivity } from "@/lib/dashboard-data";
 
 interface WeekdayActivityCardProps {
   data: WeekdayActivity[];
