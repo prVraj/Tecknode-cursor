@@ -16,27 +16,52 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
+import { useSession } from "@/lib/auth-client";
 import { MOCK_ENTITIES, MOCK_SIGNALS } from "@/lib/mock-dashboard-data";
 
 const CRITICAL_COUNT = MOCK_SIGNALS.filter((s) => s.severity === "p0").length;
-const COMPETITOR_COUNT = MOCK_ENTITIES.filter((e) => e.role === "competitor").length;
+const COMPETITOR_COUNT = MOCK_ENTITIES.filter(
+  (e) => e.role === "competitor",
+).length;
 
 const NAV_ITEMS = [
-  { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard, badge: CRITICAL_COUNT },
-  { label: "Tracking", href: "/dashboard/tracking", icon: Target, badge: COMPETITOR_COUNT },
+  {
+    label: "Dashboard",
+    href: "/dashboard",
+    icon: LayoutDashboard,
+    badge: CRITICAL_COUNT,
+  },
+  {
+    label: "Tracking",
+    href: "/dashboard/tracking",
+    icon: Target,
+    badge: COMPETITOR_COUNT,
+  },
   { label: "Daily Brief", href: "/dashboard/digest", icon: FileText, badge: 0 },
-  { label: "Integrations", href: "/dashboard/integrations", icon: Plug, badge: 0 },
+  {
+    label: "Integrations",
+    href: "/dashboard/integrations",
+    icon: Plug,
+    badge: 0,
+  },
 ] as const;
 
-// Placeholder until account-scoped auth (Task 2 of the migration plan) lands.
-const MOCK_USER = {
-  name: "Demo User",
-  email: "demo@signals.dev",
+type SidebarUser = {
+  name: string;
+  email: string;
+  image?: string | null;
 };
 
-export function AppSidebar() {
+function userInitial(name: string | undefined, email: string | undefined) {
+  const source = name?.trim() || email?.trim() || "?";
+  return source.charAt(0).toUpperCase();
+}
+
+export function AppSidebar({ user: initialUser }: { user: SidebarUser }) {
   const pathname = usePathname();
   const { setOpenMobile } = useSidebar();
+  const { data: session, isPending } = useSession();
+  const user = session?.user ?? initialUser;
 
   // Close mobile sidebar on navigation
   useEffect(() => {
@@ -97,13 +122,26 @@ export function AppSidebar() {
       <SidebarFooter className="p-0 gap-2 pb-2">
         <div className="px-2">
           <div className="p-2 bg-neutral-900 rounded-xl border border-neutral-800 flex items-center gap-2">
-            <div className="size-8 shrink-0 rounded-lg bg-neutral-700" />
+            {user?.image ? (
+              // biome-ignore lint/performance/noImgElement: external OAuth avatar URLs
+              <img
+                src={user.image}
+                alt=""
+                className="size-8 shrink-0 rounded-lg object-cover"
+              />
+            ) : (
+              <div className="size-8 shrink-0 rounded-lg bg-neutral-700 flex items-center justify-center text-sm font-medium text-neutral-100">
+                {isPending ? "…" : userInitial(user?.name, user?.email)}
+              </div>
+            )}
             <div className="flex-1 min-w-0 flex flex-col justify-center gap-0.5">
               <span className="truncate text-neutral-100 text-sm font-medium">
-                {MOCK_USER.name}
+                {isPending && !initialUser
+                  ? "Loading…"
+                  : (user?.name ?? "Signed out")}
               </span>
               <span className="truncate text-neutral-400 text-xs font-normal leading-none">
-                {MOCK_USER.email}
+                {isPending && !initialUser ? "" : (user?.email ?? "")}
               </span>
             </div>
           </div>

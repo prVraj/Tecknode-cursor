@@ -1,17 +1,22 @@
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 import { AppSidebar } from "@/components/sidebar";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { auth } from "@/lib/auth";
 
-// NOTE: session gating (auth.api.getSession + redirect) is deferred until
-// Task 2 (authentication) of the migration plan lands. This layout renders
-// unconditionally for the UI-shell pass.
-export default function DashboardLayout({
+export default async function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const session = await auth.api.getSession({ headers: await headers() });
+  if (!session) {
+    redirect("/sign-in");
+  }
+
   return (
     <SidebarProvider>
-      <AppSidebar />
+      <AppSidebar user={session.user} />
       <SidebarInset>{children}</SidebarInset>
     </SidebarProvider>
   );
